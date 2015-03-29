@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Shared
 {
-    class UserList
+    public class UserList
     {
         static UserList sessions = null;
         ConcurrentDictionary<string, User> userList;

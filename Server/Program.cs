@@ -7,19 +7,31 @@ using Shared;
 
 namespace Server
 {
-    static class Program
+    class Program
     {
+        static Log log;
+        static UserList users;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
+
+            users = UserList.getInstance();
+            log = new Log("log.txt");
+
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
 
-            UserList users = UserList.getInstance();
+        }
+
+        static public Log getLog()
+        {
+            return log;
         }
     }
 }
