@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Shared
 {
-    public class UserList
+    public class UserList : MarshalByRefObject
     {
         static UserList sessions = null;
         ConcurrentDictionary<string, User> userList;
@@ -33,7 +34,7 @@ namespace Shared
             }
 
             userList.GetOrAdd(username, new User(username, name, password));
-
+            Console.WriteLine(Process.GetCurrentProcess().ProcessName + " PINTOU");
             return true;
         }
 
@@ -44,9 +45,12 @@ namespace Shared
 
             if (password == testUser.Pass)
             {
+
+                Console.WriteLine(Process.GetCurrentProcess().ProcessName + " PINTOU");
                 return true;
             }
 
+            Console.WriteLine(Process.GetCurrentProcess().ProcessName + " NAO PINTOU");
             return false;
         }
 

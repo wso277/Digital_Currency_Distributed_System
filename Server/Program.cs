@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Shared;
+using System.Runtime.Remoting;
 
 namespace Server
 {
@@ -21,6 +22,8 @@ namespace Server
 
             users = UserList.getInstance();
             log = new Log("log.txt");
+
+            RemotingConfiguration.Configure("Server.exe.config", false);
 
 
             Application.EnableVisualStyles();
