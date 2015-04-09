@@ -28,11 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.usernameBox = new System.Windows.Forms.TextBox();
             this.passwordBox = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.usernameLabel = new System.Windows.Forms.Label();
+            this.nameLabel = new System.Windows.Forms.Label();
             this.loginButton = new System.Windows.Forms.Button();
+            this.registerButton = new System.Windows.Forms.Button();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.passwordLabel = new System.Windows.Forms.Label();
+            this.nameBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // usernameBox
@@ -44,33 +49,33 @@
             // 
             // passwordBox
             // 
-            this.passwordBox.Location = new System.Drawing.Point(85, 55);
+            this.passwordBox.Location = new System.Drawing.Point(85, 88);
             this.passwordBox.Name = "passwordBox";
             this.passwordBox.Size = new System.Drawing.Size(100, 20);
             this.passwordBox.TabIndex = 1;
             // 
-            // label1
+            // usernameLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(24, 32);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(55, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Username";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.usernameLabel.AutoSize = true;
+            this.usernameLabel.Location = new System.Drawing.Point(24, 32);
+            this.usernameLabel.Name = "usernameLabel";
+            this.usernameLabel.Size = new System.Drawing.Size(55, 13);
+            this.usernameLabel.TabIndex = 2;
+            this.usernameLabel.Text = "Username";
+            this.usernameLabel.Click += new System.EventHandler(this.label1_Click);
             // 
-            // label2
+            // nameLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(24, 57);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(53, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Password";
+            this.nameLabel.AutoSize = true;
+            this.nameLabel.Location = new System.Drawing.Point(24, 61);
+            this.nameLabel.Name = "nameLabel";
+            this.nameLabel.Size = new System.Drawing.Size(35, 13);
+            this.nameLabel.TabIndex = 3;
+            this.nameLabel.Text = "Name";
             // 
             // loginButton
             // 
-            this.loginButton.Location = new System.Drawing.Point(27, 81);
+            this.loginButton.Location = new System.Drawing.Point(27, 114);
             this.loginButton.Name = "loginButton";
             this.loginButton.Size = new System.Drawing.Size(75, 23);
             this.loginButton.TabIndex = 4;
@@ -78,17 +83,52 @@
             this.loginButton.UseVisualStyleBackColor = true;
             this.loginButton.Click += new System.EventHandler(this.loginButton_Click);
             // 
-            // Form1
+            // registerButton
+            // 
+            this.registerButton.Location = new System.Drawing.Point(110, 114);
+            this.registerButton.Name = "registerButton";
+            this.registerButton.Size = new System.Drawing.Size(75, 23);
+            this.registerButton.TabIndex = 5;
+            this.registerButton.Text = "Register";
+            this.registerButton.UseVisualStyleBackColor = true;
+            this.registerButton.Click += new System.EventHandler(this.registerButton_Click);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
+            // passwordLabel
+            // 
+            this.passwordLabel.AutoSize = true;
+            this.passwordLabel.Location = new System.Drawing.Point(24, 91);
+            this.passwordLabel.Name = "passwordLabel";
+            this.passwordLabel.Size = new System.Drawing.Size(53, 13);
+            this.passwordLabel.TabIndex = 7;
+            this.passwordLabel.Text = "Password";
+            this.passwordLabel.Click += new System.EventHandler(this.label3_Click);
+            // 
+            // nameBox
+            // 
+            this.nameBox.Location = new System.Drawing.Point(85, 58);
+            this.nameBox.Name = "nameBox";
+            this.nameBox.Size = new System.Drawing.Size(100, 20);
+            this.nameBox.TabIndex = 8;
+            // 
+            // ClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(529, 370);
+            this.Controls.Add(this.nameBox);
+            this.Controls.Add(this.passwordLabel);
+            this.Controls.Add(this.registerButton);
             this.Controls.Add(this.loginButton);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.nameLabel);
+            this.Controls.Add(this.usernameLabel);
             this.Controls.Add(this.passwordBox);
             this.Controls.Add(this.usernameBox);
-            this.Name = "Form1";
+            this.Name = "ClientForm";
             this.Text = "Form1";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -99,9 +139,13 @@
 
         private System.Windows.Forms.TextBox usernameBox;
         private System.Windows.Forms.TextBox passwordBox;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label usernameLabel;
         private System.Windows.Forms.Button loginButton;
+        private System.Windows.Forms.Button registerButton;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.Label passwordLabel;
+        public System.Windows.Forms.Label nameLabel;
+        private System.Windows.Forms.TextBox nameBox;
     }
 }
 

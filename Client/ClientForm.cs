@@ -22,10 +22,6 @@ namespace Client
             ul = new UserList();
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void loginButton_Click(object sender, EventArgs e)
         {
@@ -34,6 +30,23 @@ namespace Client
                 usernameBox.Text = "Pintou";
                 passwordBox.Text = "Caralho!";
             }
+        }
+
+        private void registerButton_Click(object sender, EventArgs e)
+        {
+            ul.addUser(usernameBox.Text, nameBox.Text, passwordBox.Text.GetHashCode());
+            usernameBox.Text = "Registo";
+            nameBox.Text = "DEU";
+            passwordBox.Text = "Caralho!";
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
