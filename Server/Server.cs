@@ -16,19 +16,12 @@ namespace Server
     {
         static Log log;
 
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main()
         {
             log = new Log("log.txt");
 
             RemotingConfiguration.Configure("Server.exe.config", false);
-
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
 
         }
 

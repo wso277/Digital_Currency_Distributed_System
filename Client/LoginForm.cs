@@ -12,10 +12,10 @@ using System.Windows.Forms;
 
 namespace Client
 {
-    public partial class ClientForm : Form
+    public partial class LoginForm : Form
     {
         UserList ul;
-        public ClientForm()
+        public LoginForm()
         {
             InitializeComponent();
             RemotingConfiguration.Configure("Client.exe.config", false);
@@ -28,7 +28,13 @@ namespace Client
             if (ul.checkLogin(usernameBox.Text, passwordBox.Text.GetHashCode()))
             {
                 usernameBox.Text = "Pintou";
+                nameBox.Text = "";
                 passwordBox.Text = "Caralho!";
+                openMainForm();
+            }
+            else
+            {
+                errorLabel.Text = "Login failed. Please check your username/password";
             }
         }
 
@@ -36,17 +42,23 @@ namespace Client
         {
             ul.addUser(usernameBox.Text, nameBox.Text, passwordBox.Text.GetHashCode());
             usernameBox.Text = "Registo";
-            nameBox.Text = "DEU";
+            nameBox.Text = "Deu";
             passwordBox.Text = "Caralho!";
+            openMainForm();
         }
 
-        private void label3_Click(object sender, EventArgs e)
+        private void openMainForm()
         {
-
+            MainForm mainForm = new MainForm();
+            this.Hide();
+            mainForm.ShowDialog();
         }
-        private void label1_Click(object sender, EventArgs e)
-        {
 
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+
+            Application.Exit();
         }
     }
 }

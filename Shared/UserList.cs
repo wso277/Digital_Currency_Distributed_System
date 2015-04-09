@@ -36,18 +36,17 @@ namespace Shared
 
         public bool checkLogin(string username, int password)
         {
+            if (username == null || password == null) return false;
+
             User testUser;
-            Console.WriteLine("Username: " + username + ", password: " + password);
             userList.TryGetValue(username, out testUser);
 
-            Console.WriteLine(testUser.Pass);
+            if (testUser != null)
+                if (password == testUser.Pass)
+                {
+                    return true;
+                }
 
-            if (password == testUser.Pass)
-            {
-                return true;
-            }
-
-            Console.WriteLine(Process.GetCurrentProcess().ProcessName + " " + "Password Errada");
             return false;
         }
 
@@ -70,7 +69,7 @@ namespace Shared
         {
             if (File.Exists(pathToDB))
             {
-                
+
                 JsonSerializer js = new JsonSerializer();
                 js.NullValueHandling = NullValueHandling.Ignore;
                 using (StreamReader sw = new StreamReader(pathToDB))
