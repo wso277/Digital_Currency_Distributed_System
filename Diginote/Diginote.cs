@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Diginote
+namespace Market
 {
     public class Diginote
     {
-        ulong serialNumber;
+        public ulong serialNumber {get; set;}
         double val;
 
-        public ulong Serial
+        /*public ulong Serial
         {
             get
             {
@@ -29,7 +29,7 @@ namespace Diginote
             {
                 val = value;
             }
-        }
+        }*/
 
         public Diginote(ulong value = 1)
         {

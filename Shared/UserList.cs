@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using Market;
 
 namespace Shared
 {
@@ -27,6 +28,7 @@ namespace Shared
             }
 
             userList.GetOrAdd(username, new User(username, name, password));
+            Controller.getInstance().addDigiNotes(username);
 
             saveUsers();
             return true;
