@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Shared
 {
+    [Serializable()]
     public class User
     {
         string username;
         string nickname;
-        int password;
+        long password;
 
-        public int Pass
+        public long Pass
         {
             get
             {
@@ -36,17 +34,18 @@ namespace Shared
             bool flop = false;
             if (user != username)
             {
-                Console.WriteLine("Wrong username!");
+                Console.WriteLine(Process.GetCurrentProcess().ProcessName + " " + "Wrong username!");
                 flop = true;
             }
 
             if (pass != password)
             {
-                Console.WriteLine("Wrong password!");
+                Console.WriteLine(Process.GetCurrentProcess().ProcessName + " " + "Wrong password!");
                 return flop;
             }
 
             return flop;
         }
+
     }
 }

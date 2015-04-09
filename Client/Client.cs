@@ -5,10 +5,11 @@ using System.Runtime.Remoting;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Shared;
+using System.Diagnostics;
 
 namespace Client
 {
-    static class Program
+    static class Client
     {
         /// <summary>
         /// The main entry point for the application.
@@ -18,25 +19,25 @@ namespace Client
         {
 
             RemotingConfiguration.Configure("Client.exe.config", false);
-            UserList users = UserList.getInstance();
+            UserList users = new UserList();
 
-            int pass = "password".GetHashCode();
-            if (users.addUser("username", "Name", pass))
+            int pass = "kekk".GetHashCode();
+            if (users.addUser("username2", "Name", pass))
             {
-                Console.WriteLine("PINTOU");
+                Console.WriteLine(Process.GetCurrentProcess().ProcessName + " " + "Adicionei User");
             }
             else
             {
-                Console.WriteLine( "NAO PINTOU");
+                Console.WriteLine(Process.GetCurrentProcess().ProcessName + " " + "Não Adicionei User");
             }
 
-            if (users.checkLogin("username", pass))
+            if (users.checkLogin("username2", pass))
             {
-                Console.WriteLine("C#! C#! C#!");
+                Console.WriteLine(Process.GetCurrentProcess().ProcessName + " " + "Guardou User, Fez Login");
             }
             else
             {
-                Console.WriteLine("NINGUEM QUER SABER");
+                Console.WriteLine(Process.GetCurrentProcess().ProcessName + " " + "Não Fez Login");
             }
 
             Application.EnableVisualStyles();
