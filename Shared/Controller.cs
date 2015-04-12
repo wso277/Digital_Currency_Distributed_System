@@ -7,19 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Market
+namespace Remote
 {
     public class Controller
     {
         static Controller controller = null;
         string pathToDiginoteDB = "diginotes.db";
         ConcurrentDictionary<ulong, string> diginotes;
+
         static int MAX_DIGINOTES = 1000;
         static int DIGINOTES_TO_DISTRIBUTE = 500;
         int diginotesInSystem = 0;
         int digiValue = 1;
 
-        public static Controller getInstance() {
+        public static Controller getInstance()
+        {
             if (controller == null)
             {
                 controller = new Controller();
@@ -77,8 +79,27 @@ namespace Market
             }
         }
 
-        public void changeDiginoteOwner(string[] diginotes,string oldUsername,string newUsername) {
+        public bool transaction(ulong[] diginotesToTransaction, string oldUsername, string newUsername)
+        {
+            foreach (ulong s in diginotesToTransaction)
+            {
+                string username;
+                diginotes.TryGetValue(s, out username);
+                if (username == oldUsername)
+                {
+                    diginotes.TryUpdate(s, newUsername, oldUsername);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
 
+        public void addOrder(string type, float value, int nDiginotes, string username)
+        {
+            throw new NotImplementedException();
         }
     }
 }

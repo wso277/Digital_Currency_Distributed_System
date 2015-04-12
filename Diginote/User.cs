@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Shared
+namespace Common
 {
     [Serializable()]
     public class User

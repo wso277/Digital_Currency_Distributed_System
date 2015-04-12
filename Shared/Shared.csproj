@@ -7,7 +7,7 @@
     <ProjectGuid>{189600B8-1F49-44EA-921F-F7012F66E164}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Shared</RootNamespace>
+    <RootNamespace>Remote</RootNamespace>
     <AssemblyName>Shared</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -43,8 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Log.cs" />
-    <Compile Include="User.cs" />
+    <Compile Include="Controller.cs" />
+    <Compile Include="Diginote.cs" />
+    <Compile Include="Operation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserList.cs" />
   </ItemGroup>

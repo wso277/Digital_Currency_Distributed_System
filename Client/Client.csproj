@@ -91,10 +91,6 @@
       <Project>{0f1893c4-6bb3-4015-890d-d15e6943ab16}</Project>
       <Name>Diginote</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Shared\Shared.csproj">
-      <Project>{189600b8-1f49-44ea-921f-f7012f66e164}</Project>
-      <Name>Shared</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

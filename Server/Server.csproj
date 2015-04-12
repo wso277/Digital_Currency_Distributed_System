@@ -48,9 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Form1.cs" />
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
@@ -80,10 +78,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Client\Client.csproj">
-      <Project>{92402b62-0275-4698-b2bb-03c0ea2728e0}</Project>
-      <Name>Client</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Diginote\Diginote.csproj">
       <Project>{0f1893c4-6bb3-4015-890d-d15e6943ab16}</Project>
       <Name>Diginote</Name>

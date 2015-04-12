@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Shared;
 using System.Runtime.Remoting;
 using System.Diagnostics;
 using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Concurrent;
+using Common;
 
 namespace Server
 {

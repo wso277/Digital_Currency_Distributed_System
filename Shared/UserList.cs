@@ -3,9 +3,9 @@ using System.IO;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using Newtonsoft.Json;
-using Market;
+using Common;
 
-namespace Shared
+namespace Remote
 {
     [Serializable()]
     public class UserList : MarshalByRefObject

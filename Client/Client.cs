@@ -4,8 +4,8 @@ using System.Linq;
 using System.Runtime.Remoting;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Shared;
 using System.Diagnostics;
+using Common;
 
 namespace Client
 {
