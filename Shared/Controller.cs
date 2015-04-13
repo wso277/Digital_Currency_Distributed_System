@@ -29,7 +29,7 @@ namespace Remote
             return controller;
         }
 
-        public Controller()
+        private Controller()
         {
 
             loadDiginotes();
@@ -71,12 +71,14 @@ namespace Remote
         {
             if (diginotesInSystem < MAX_DIGINOTES)
             {
+                Random r = new Random();
                 for (int i = 0; i < DIGINOTES_TO_DISTRIBUTE; i++)
                 {
-                    Diginote dig = new Diginote();
-                    diginotes.GetOrAdd(dig.serialNumber, username);
+                    Diginote dig = new Diginote(r);
+                    diginotes.TryAdd(dig.serialNumber, username);
                     diginotesInSystem = diginotes.Count;
                 }
+                saveDiginotes();
             }
         }
 
@@ -106,9 +108,9 @@ namespace Remote
         public int getDiginotes(string username)
         {
             int nDiginotes = 0;
-            foreach (string name in diginotes.Values)
+            foreach (var pair in diginotes)
             {
-                if (name == username) nDiginotes++;
+                if (pair.Value == username) nDiginotes++;
             }
             return nDiginotes;
         }

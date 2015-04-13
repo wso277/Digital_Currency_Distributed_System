@@ -28,7 +28,8 @@ namespace Remote
             }
 
             userList.GetOrAdd(username, new User(username, name, password));
-            Controller.getInstance().addDigiNotes(username);
+            //Controller.getInstance().addDigiNotes(username);
+            //Console.WriteLine(Controller.getInstance().getDiginotes(username).ToString());
 
             saveUsers();
             return true;

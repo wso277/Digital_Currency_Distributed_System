@@ -31,10 +31,11 @@ namespace Remote
             }
         }*/
 
-        public Diginote(ulong value = 1)
+        public Diginote(Random r, ulong value = 1)
         {
             val = value;
-            serialNumber = (ulong)DateTime.Now.GetHashCode();
+            serialNumber = (ulong)DateTime.Now.GetHashCode() + (ulong)r.Next(Int32.MaxValue);
+            Console.WriteLine(serialNumber);
         }
     }
 }
