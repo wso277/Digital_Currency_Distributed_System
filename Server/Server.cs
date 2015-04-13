@@ -16,12 +16,13 @@ namespace Server
     {
         static Log log;
 
-        [STAThread]
         static void Main()
         {
             log = new Log("log.txt");
 
             RemotingConfiguration.Configure("Server.exe.config", false);
+
+            Console.Read();
 
         }
 

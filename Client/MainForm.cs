@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,14 +8,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Runtime.Remoting;
 
 namespace Client
 {
     public partial class MainForm : Form
     {
-        public MainForm()
+        IOperation iop;
+        string username;
+        public MainForm(string username)
         {
+            this.username = username;
             InitializeComponent();
+            iop = (IOperation) RemoteNew.New(typeof(IOperation));
+            nDiginotesLabel.Text = iop.getDiginotes(username).ToString();
         }
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
@@ -30,6 +37,11 @@ namespace Client
             operationHistoryTable.Controls.Add(new Label() { Text = "Value/Diginote", Anchor = AnchorStyles.Top, AutoSize = true }, 2, 0);
             operationHistoryTable.Controls.Add(new Label() { Text = "TotalValue", Anchor = AnchorStyles.Top, AutoSize = true }, 3, 0);
             
+        }
+
+        private void nDiginotesLabel_Click(object sender, EventArgs e)
+        {
+            nDiginotesLabel.Text = iop.getDiginotes(username).ToString();
         }
     }
 }

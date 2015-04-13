@@ -1,4 +1,4 @@
-﻿using Shared;
+﻿using Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,12 +14,11 @@ namespace Client
 {
     public partial class LoginForm : Form
     {
-        UserList ul;
+        IUserList ul;
         public LoginForm()
         {
             InitializeComponent();
-            RemotingConfiguration.Configure("Client.exe.config", false);
-            ul = new UserList();
+            ul = (IUserList) RemoteNew.New(typeof(IUserList));
         }
 
 
@@ -30,6 +29,7 @@ namespace Client
                 usernameBox.Text = "Pintou";
                 nameBox.Text = "";
                 passwordBox.Text = "Caralho!";
+
                 openMainForm();
             }
             else
@@ -49,7 +49,7 @@ namespace Client
 
         private void openMainForm()
         {
-            MainForm mainForm = new MainForm();
+            MainForm mainForm = new MainForm(usernameBox.Text);
             this.Hide();
             mainForm.ShowDialog();
         }

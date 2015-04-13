@@ -75,6 +75,7 @@ namespace Remote
                 {
                     Diginote dig = new Diginote();
                     diginotes.GetOrAdd(dig.serialNumber, username);
+                    diginotesInSystem = diginotes.Count;
                 }
             }
         }
@@ -100,6 +101,16 @@ namespace Remote
         public void addOrder(string type, float value, int nDiginotes, string username)
         {
             throw new NotImplementedException();
+        }
+
+        public int getDiginotes(string username)
+        {
+            int nDiginotes = 0;
+            foreach (string name in diginotes.Values)
+            {
+                if (name == username) nDiginotes++;
+            }
+            return nDiginotes;
         }
     }
 }

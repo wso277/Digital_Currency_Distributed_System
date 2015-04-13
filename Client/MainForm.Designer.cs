@@ -34,6 +34,8 @@
             this.venderButton = new System.Windows.Forms.Button();
             this.comprarButton = new System.Windows.Forms.Button();
             this.operationHistoryTable = new System.Windows.Forms.TableLayoutPanel();
+            this.nDiginotesTextLabel = new System.Windows.Forms.Label();
+            this.nDiginotesLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // logoutButton
@@ -59,8 +61,9 @@
             this.cotacaoLabel.AutoSize = true;
             this.cotacaoLabel.Location = new System.Drawing.Point(95, 17);
             this.cotacaoLabel.Name = "cotacaoLabel";
-            this.cotacaoLabel.Size = new System.Drawing.Size(0, 13);
+            this.cotacaoLabel.Size = new System.Drawing.Size(13, 13);
             this.cotacaoLabel.TabIndex = 2;
+            this.cotacaoLabel.Text = "0";
             // 
             // venderButton
             // 
@@ -91,16 +94,37 @@
             this.operationHistoryTable.Location = new System.Drawing.Point(12, 69);
             this.operationHistoryTable.Name = "operationHistoryTable";
             this.operationHistoryTable.RowCount = 1;
-            this.operationHistoryTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.operationHistoryTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200F));
             this.operationHistoryTable.Size = new System.Drawing.Size(591, 200);
             this.operationHistoryTable.TabIndex = 5;
             this.operationHistoryTable.Tag = "";
+            // 
+            // nDiginotesTextLabel
+            // 
+            this.nDiginotesTextLabel.AutoSize = true;
+            this.nDiginotesTextLabel.Location = new System.Drawing.Point(12, 40);
+            this.nDiginotesTextLabel.Name = "nDiginotesTextLabel";
+            this.nDiginotesTextLabel.Size = new System.Drawing.Size(109, 13);
+            this.nDiginotesTextLabel.TabIndex = 6;
+            this.nDiginotesTextLabel.Text = "Número de Diginotes:";
+            // 
+            // nDiginotesLabel
+            // 
+            this.nDiginotesLabel.AutoSize = true;
+            this.nDiginotesLabel.Location = new System.Drawing.Point(127, 40);
+            this.nDiginotesLabel.Name = "nDiginotesLabel";
+            this.nDiginotesLabel.Size = new System.Drawing.Size(37, 13);
+            this.nDiginotesLabel.TabIndex = 7;
+            this.nDiginotesLabel.Text = "PILAS";
+            this.nDiginotesLabel.Click += new System.EventHandler(this.nDiginotesLabel_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(615, 324);
+            this.Controls.Add(this.nDiginotesLabel);
+            this.Controls.Add(this.nDiginotesTextLabel);
             this.Controls.Add(this.operationHistoryTable);
             this.Controls.Add(this.comprarButton);
             this.Controls.Add(this.venderButton);
@@ -123,5 +147,7 @@
         private System.Windows.Forms.Button venderButton;
         private System.Windows.Forms.Button comprarButton;
         private System.Windows.Forms.TableLayoutPanel operationHistoryTable;
+        private System.Windows.Forms.Label nDiginotesTextLabel;
+        private System.Windows.Forms.Label nDiginotesLabel;
     }
 }

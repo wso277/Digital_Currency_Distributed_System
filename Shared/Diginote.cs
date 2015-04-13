@@ -25,7 +25,7 @@ namespace Remote
             {
                 return val;
             }
-            set
+            set fica mano
             {
                 val = value;
             }

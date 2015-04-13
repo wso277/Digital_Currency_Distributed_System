@@ -7,9 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{92402B62-0275-4698-B2BB-03C0EA2728E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diginote", "Diginote\Diginote.csproj", "{0F1893C4-6BB3-4015-890D-D15E6943AB16}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Diginote\Common.csproj", "{0F1893C4-6BB3-4015-890D-D15E6943AB16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{189600B8-1F49-44EA-921F-F7012F66E164}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Remote", "Shared\Remote.csproj", "{189600B8-1F49-44EA-921F-F7012F66E164}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

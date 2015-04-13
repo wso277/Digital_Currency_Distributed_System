@@ -17,6 +17,7 @@ namespace Client
         [STAThread]
         static void Main()
         {
+            RemotingConfiguration.Configure("Client.exe.config", false);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             LoginForm loginForm = new LoginForm();

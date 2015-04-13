@@ -8,5 +8,6 @@ namespace Common
 {
     public interface IOperation
     {
+        int getDiginotes(string username);
     }
 }

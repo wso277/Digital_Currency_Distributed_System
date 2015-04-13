@@ -7,8 +7,8 @@ using Common;
 
 namespace Remote
 {
-    [Serializable()]
-    public class UserList : MarshalByRefObject
+    [Serializable]
+    public class UserList : MarshalByRefObject, IUserList
     {
         static string pathToDB = "database.db";
         static ConcurrentDictionary<string, User> userList;
