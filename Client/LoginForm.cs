@@ -26,11 +26,7 @@ namespace Client
         {
             if (ul.checkLogin(usernameBox.Text, passwordBox.Text.GetHashCode()))
             {
-                usernameBox.Text = "Pintou";
-                nameBox.Text = "";
-                passwordBox.Text = "Caralho!";
-
-                openMainForm();
+                openMainForm(false);
             }
             else
             {
@@ -41,15 +37,12 @@ namespace Client
         private void registerButton_Click(object sender, EventArgs e)
         {
             ul.addUser(usernameBox.Text, nameBox.Text, passwordBox.Text.GetHashCode());
-            usernameBox.Text = "Registo";
-            nameBox.Text = "Deu";
-            passwordBox.Text = "Caralho!";
-            openMainForm();
+            openMainForm(true);
         }
 
-        private void openMainForm()
+        private void openMainForm(bool newU)
         {
-            MainForm mainForm = new MainForm(usernameBox.Text);
+            MainForm mainForm = new MainForm(usernameBox.Text, newU);
             this.Hide();
             mainForm.ShowDialog();
         }

@@ -108,9 +108,11 @@ namespace Remote
         public int getDiginotes(string username)
         {
             int nDiginotes = 0;
-            foreach (var pair in diginotes)
+            foreach (string name in diginotes.Values)
             {
-                if (pair.Value == username) nDiginotes++;
+                Console.WriteLine("NAME: " + name);
+                Console.WriteLine("USERNAME: " + username);
+                if (name == username) nDiginotes++;
             }
             return nDiginotes;
         }

@@ -16,11 +16,16 @@ namespace Client
     {
         IOperation iop;
         string username;
-        public MainForm(string username)
+        public MainForm(string username, bool newU)
         {
             this.username = username;
             InitializeComponent();
             iop = (IOperation) RemoteNew.New(typeof(IOperation));
+            if (newU)
+            {
+                iop.addDiginotes(username);
+            }
+
             nDiginotesLabel.Text = iop.getDiginotes(username).ToString();
         }
         protected override void OnFormClosing(FormClosingEventArgs e)

@@ -9,5 +9,7 @@ namespace Common
     public interface IOperation
     {
         int getDiginotes(string username);
+
+        void addDiginotes(string username);
     }
 }

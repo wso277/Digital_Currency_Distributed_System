@@ -33,5 +33,10 @@ namespace Remote
             return Controller.getInstance().getDiginotes(username);
         }
 
+        public void addDiginotes(string username)
+        {
+            Controller.getInstance().addDigiNotes(username);
+        }
+
     }
 }

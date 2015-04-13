@@ -35,7 +35,6 @@ namespace Remote
         {
             val = value;
             serialNumber = (ulong)DateTime.Now.GetHashCode() + (ulong)r.Next(Int32.MaxValue);
-            Console.WriteLine(serialNumber);
         }
     }
 }
