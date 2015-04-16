@@ -11,5 +11,9 @@ namespace Common
         int getDiginotes(string username);
 
         void addDiginotes(string username);
+
+        float getCotacao();
+
+        bool addOrder(Order order);
     }
 }

@@ -9,8 +9,16 @@ namespace Common
 {
     public class Log
     {
+        static Log log = null;
         string path;
         StreamWriter sw;
+
+        public static Log getInstance() {
+            if (log == null) {
+                log = new Log("log.txt");
+            }
+            return log;
+        }
 
         public Log(string path)
         {
@@ -28,7 +36,8 @@ namespace Common
         
         public void printLog(string msg)
         {
-            sw.WriteLine(msg);
+            Console.WriteLine(msg);
+            sw.WriteLine(DateTime.Now + " | " + msg);
             sw.Flush();
         }
     }

@@ -14,21 +14,14 @@ namespace Server
 {
     class Server
     {
-        static Log log;
 
         static void Main()
         {
-            log = new Log("log.txt");
-
             RemotingConfiguration.Configure("Server.exe.config", false);
 
             Console.Read();
 
         }
 
-        static public Log getLog()
-        {
-            return log;
-        }
     }
 }

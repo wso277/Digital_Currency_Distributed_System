@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common;
 
 namespace Remote
 {
@@ -13,12 +14,16 @@ namespace Remote
     {
         static Controller controller = null;
         string pathToDiginoteDB = "diginotes.db";
+        string pathToOrdersDB = "orders.db";
         ConcurrentDictionary<ulong, string> diginotes;
+        ConcurrentQueue<Order> sell;
+        ConcurrentQueue<Order> buy;
 
         static int MAX_DIGINOTES = 1000;
         static int DIGINOTES_TO_DISTRIBUTE = 500;
         int diginotesInSystem = 0;
         int digiValue = 1;
+        public float cotacao = 1;
 
         public static Controller getInstance()
         {
@@ -33,6 +38,7 @@ namespace Remote
         {
 
             loadDiginotes();
+            loadOrders();
 
             diginotesInSystem = diginotes.Count;
         }
@@ -64,6 +70,41 @@ namespace Remote
             {
                 js.Serialize(writer, diginotes);
             }
+        }
+
+        private void loadOrders()
+        {
+            if (File.Exists(pathToOrdersDB))
+            {
+                StreamReader rw = new StreamReader(pathToOrdersDB);
+                string sellString = rw.ReadLine();
+                string buyString = rw.ReadLine();
+
+                List<Order> sellList = JsonConvert.DeserializeObject<List<Order>>(sellString);
+                List<Order> buyList = JsonConvert.DeserializeObject<List<Order>>(buyString);
+                sell = new ConcurrentQueue<Order>(sellList);
+                buy = new ConcurrentQueue<Order>(buyList);
+
+            }
+            else
+            {
+                sell = new ConcurrentQueue<Order>();
+                buy = new ConcurrentQueue<Order>();
+            }
+        }
+        private void saveOrders()
+        {
+            List<Order> sellList = new List<Order>(sell);
+            List<Order> buyList = new List<Order>(buy);
+            string sellJson = JsonConvert.SerializeObject(sellList);
+            string buyJson = JsonConvert.SerializeObject(buyList);
+
+            StreamWriter sw;
+            sw = File.CreateText(pathToOrdersDB);
+
+            sw.WriteLine(sellJson);
+            sw.WriteLine(buyJson);
+            sw.Flush();
         }
 
 
@@ -100,21 +141,63 @@ namespace Remote
             return true;
         }
 
-        public void addOrder(string type, float value, int nDiginotes, string username)
-        {
-            throw new NotImplementedException();
-        }
-
         public int getDiginotes(string username)
         {
             int nDiginotes = 0;
             foreach (string name in diginotes.Values)
             {
-                Console.WriteLine("NAME: " + name);
-                Console.WriteLine("USERNAME: " + username);
                 if (name == username) nDiginotes++;
             }
             return nDiginotes;
         }
+
+        public float getCotacao()
+        {
+            return cotacao;
+        }
+
+        public bool addOrder(Order order) {
+            var iterator = sell.GetEnumerator();
+
+            while (iterator.MoveNext()) {
+                if (iterator.Current.Username == order.Username) {
+
+                    Log.getInstance().printLog("Already exist order from same username " + order.Username);
+                    return false;
+                }
+            }
+
+            iterator = buy.GetEnumerator();
+            while (iterator.MoveNext())
+            {
+                if (iterator.Current.Username == order.Username)
+                {
+
+                    Log.getInstance().printLog("Already exist order from same username " + order.Username);
+                    return false;
+                }
+            }
+
+            if (order.Type == "sell")
+            {
+                Log.getInstance().printLog("Added new sell order");
+                //sell.Enqueue(order);
+                sell.Enqueue(order);
+                saveOrders();
+                return true;
+            }
+            else if (order.Type == "buy")
+            {
+
+                Log.getInstance().printLog("Added new buy order");
+                //buy.Enqueue(order);
+                buy.Enqueue(order);
+                saveOrders();
+                return true;
+            }
+
+            return false;
+        }
+
     }
 }

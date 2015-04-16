@@ -23,11 +23,6 @@ namespace Remote
             this.username = username;
         }
 
-        public void addOperation()
-        {
-            Controller.getInstance().addOrder(type, value, nDiginotes, username);
-        }
-
         public int getDiginotes(string username)
         {
             return Controller.getInstance().getDiginotes(username);
@@ -38,5 +33,14 @@ namespace Remote
             Controller.getInstance().addDigiNotes(username);
         }
 
+        public float getCotacao()
+        {
+            return Controller.getInstance().getCotacao();
+        }
+
+        public bool addOrder(Order order)
+        {
+            return Controller.getInstance().addOrder(order);
+        }
     }
 }

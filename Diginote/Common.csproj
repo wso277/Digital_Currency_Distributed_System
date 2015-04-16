@@ -44,8 +44,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IUserList.cs" />
+    <Compile Include="JsonWriterQueue.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="IOperation.cs" />
+    <Compile Include="Order.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
