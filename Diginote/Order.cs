@@ -10,6 +10,13 @@ namespace Common
     public class Order
     {
         string username;
+        string status;
+
+        public string Status
+        {
+            get { return status; }
+            set { status = value; }
+        }
 
         public string Username
         {
@@ -30,12 +37,6 @@ namespace Common
             get { return nDiginotes; }
             set { nDiginotes = value; }
         }
-
-        public decimal NDiginotes1
-        {
-            get { return nDiginotes; }
-            set { nDiginotes = value; }
-        }
         string type;
 
         public string Type
@@ -50,6 +51,7 @@ namespace Common
             this.cotacao = cotacao;
             this.nDiginotes = nDiginotes;
             this.type = type;
+            this.status = "Not Finished";
         }
 
 

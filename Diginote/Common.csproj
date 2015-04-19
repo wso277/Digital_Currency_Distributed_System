@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Handlers.cs" />
     <Compile Include="IUserList.cs" />
     <Compile Include="JsonWriterQueue.cs" />
     <Compile Include="Log.cs" />

@@ -20,11 +20,13 @@ namespace Client
         IOperation iop;
         string username;
         List<Order> orders;
+        public Handlers handlersObj;
+
         public MainForm(string username, bool newU)
         {
             this.username = username;
             InitializeComponent();
-            iop = (IOperation) RemoteNew.New(typeof(IOperation));
+            iop = (IOperation)RemoteNew.New(typeof(IOperation));
             if (newU)
             {
                 iop.addDiginotes(username);
@@ -33,6 +35,9 @@ namespace Client
             loadOrders();
             nDiginotesLabel.Text = iop.getDiginotes(username).ToString();
             cotacaoLabel.Text = iop.getCotacao().ToString();
+
+            handlersObj = new Handlers(iop);
+            handlersObj.updateOrderEvent += updateOrderHandler;
 
             updateOrderTable();
         }
@@ -49,7 +54,7 @@ namespace Client
             operationHistoryTable.Controls.Add(new Label() { Text = "Ammount of Diginotes", Anchor = AnchorStyles.Top, AutoSize = true }, 1, 0);
             operationHistoryTable.Controls.Add(new Label() { Text = "Value/Diginote", Anchor = AnchorStyles.Top, AutoSize = true }, 2, 0);
             operationHistoryTable.Controls.Add(new Label() { Text = "TotalValue", Anchor = AnchorStyles.Top, AutoSize = true }, 3, 0);
-            
+            operationHistoryTable.Controls.Add(new Label() { Text = "State", Anchor = AnchorStyles.Top, AutoSize = true }, 4, 0);
         }
 
         private void nDiginotesLabel_Click(object sender, EventArgs e)
@@ -60,6 +65,7 @@ namespace Client
         private void venderButton_Click(object sender, EventArgs e)
         {
             decimal nDiginotes = nDiginotesSpinner.Value;
+
 
             if (nDiginotes > 0 && nDiginotes <= iop.getDiginotes(username))
             {
@@ -74,12 +80,15 @@ namespace Client
                 {
                     //TODO ADD ERROR LABEL
                 }
+
             }
         }
 
         private void comprarButton_Click(object sender, EventArgs e)
         {
             decimal nDiginotes = nDiginotesSpinner.Value;
+
+
 
             if (nDiginotes > 0)
             {
@@ -104,18 +113,20 @@ namespace Client
             operationHistoryTable.Controls.Add(new Label() { Text = "Ammount of Diginotes", Anchor = AnchorStyles.Top, AutoSize = true }, 1, 0);
             operationHistoryTable.Controls.Add(new Label() { Text = "Value/Diginote", Anchor = AnchorStyles.Top, AutoSize = true }, 2, 0);
             operationHistoryTable.Controls.Add(new Label() { Text = "TotalValue", Anchor = AnchorStyles.Top, AutoSize = true }, 3, 0);
+            operationHistoryTable.Controls.Add(new Label() { Text = "State", Anchor = AnchorStyles.Top, AutoSize = true }, 4, 0);
 
             for (int c = 0, line = 1; line <= orders.Count; line++)
             {
-                operationHistoryTable.Controls.Add(new Label() { Text = orders.ElementAt<Order>(line-1).Type, Anchor = AnchorStyles.Top, AutoSize = true }, c++, line);
-                operationHistoryTable.Controls.Add(new Label() { Text = orders.ElementAt<Order>(line - 1).NDiginotes1.ToString(), Anchor = AnchorStyles.Top, AutoSize = true }, c++, line);
+                operationHistoryTable.Controls.Add(new Label() { Text = orders.ElementAt<Order>(line - 1).Type, Anchor = AnchorStyles.Top, AutoSize = true }, c++, line);
+                operationHistoryTable.Controls.Add(new Label() { Text = orders.ElementAt<Order>(line - 1).NDiginotes.ToString(), Anchor = AnchorStyles.Top, AutoSize = true }, c++, line);
                 operationHistoryTable.Controls.Add(new Label() { Text = orders.ElementAt<Order>(line - 1).Cotacao.ToString(), Anchor = AnchorStyles.Top, AutoSize = true }, c++, line);
-                operationHistoryTable.Controls.Add(new Label() { Text = ((float)orders.ElementAt<Order>(line - 1).NDiginotes1 * orders.ElementAt<Order>(line - 1).Cotacao).ToString(), Anchor = AnchorStyles.Top, AutoSize = true }, c++, line);
+                operationHistoryTable.Controls.Add(new Label() { Text = ((float)orders.ElementAt<Order>(line - 1).NDiginotes * orders.ElementAt<Order>(line - 1).Cotacao).ToString(), Anchor = AnchorStyles.Top, AutoSize = true }, c++, line);
+                operationHistoryTable.Controls.Add(new Label() { Text = orders.ElementAt<Order>(line - 1).Status, Anchor = AnchorStyles.Top, AutoSize = true }, c++, line);
                 c = 0;
             }
         }
 
-        
+
         private void loadOrders()
         {
             if (File.Exists(pathToOrdersDB))
@@ -141,6 +152,11 @@ namespace Client
             sw.WriteLine(ordersString);
             sw.Flush();
             sw.Close();
+        }
+
+        public void updateOrderHandler(Order buyerOrder, Order sellerOrder)
+        {
+            Log.getInstance().printLog("UPDATE ORDER HANDLER");
         }
     }
 }

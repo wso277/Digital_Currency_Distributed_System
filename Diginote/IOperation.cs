@@ -8,6 +8,8 @@ namespace Common
 {
     public interface IOperation
     {
+        event UpdateOrder updateOrderEvent;
+
         int getDiginotes(string username);
 
         void addDiginotes(string username);

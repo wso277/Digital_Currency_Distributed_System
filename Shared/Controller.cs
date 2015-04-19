@@ -25,6 +25,7 @@ namespace Remote
         int digiValue = 1;
         public float cotacao = 1;
 
+
         public static Controller getInstance()
         {
             if (controller == null)
@@ -153,7 +154,7 @@ namespace Remote
             return cotacao;
         }
 
-        public bool addOrder(Order order)
+        public List<Order> addOrder(Order order)
         {
             var iterator = sell.GetEnumerator();
 
@@ -163,7 +164,7 @@ namespace Remote
                 {
 
                     Log.getInstance().printLog("Already exist order from same username " + order.Username);
-                    return false;
+                    return null;
                 }
             }
 
@@ -174,32 +175,33 @@ namespace Remote
                 {
 
                     Log.getInstance().printLog("Already exist order from same username " + order.Username);
-                    return false;
+                    return null;
                 }
             }
 
+            List<Order> list;
             if (order.Type == "sell")
             {
                 Log.getInstance().printLog("Added new sell order");
                 sell.Enqueue(order);
+                list = concretizeOrder();
                 saveOrders();
-                concretizeOrder();
-                return true;
+                return list;
             }
             else if (order.Type == "buy")
             {
 
                 Log.getInstance().printLog("Added new buy order");
                 buy.Enqueue(order);
+                list = concretizeOrder();
                 saveOrders();
-                concretizeOrder();
-                return true;
+                return list;
             }
 
-            return false;
+            return null;
         }
 
-        private bool concretizeOrder()
+        private List<Order> concretizeOrder()
         {
             Order firstBuy = null;
             Order firstSell = null;
@@ -211,11 +213,11 @@ namespace Remote
             if (firstBuy == null || firstSell == null)
             {
                 Log.getInstance().printLog("Não há ordens a concretizar");
-                return false;
+                return null;
             }
 
-            transactionAmmount = Math.Min((int)firstBuy.NDiginotes1, (int)firstSell.NDiginotes1);
-            
+            transactionAmmount = Math.Min((int)firstBuy.NDiginotes, (int)firstSell.NDiginotes);
+
             List<Diginote> sellerDig = new List<Diginote>();
             List<Diginote> buyerDig = new List<Diginote>();
             diginotes.TryGetValue(firstSell.Username, out sellerDig);
@@ -224,7 +226,7 @@ namespace Remote
             if (sellerDig.Count < transactionAmmount)
             {
                 Log.getInstance().printLog("O Seller não tem suficientes");
-                return false;
+                return null;
             }
 
             Diginote tempDig;
@@ -239,18 +241,21 @@ namespace Remote
             diginotes[firstBuy.Username] = buyerDig;
             diginotes[firstSell.Username] = sellerDig;
 
+            saveDiginotes();
+
             Log.getInstance().printLog("Um coiso tipo fez transação");
 
             Order or;
-            if (transactionAmmount < firstBuy.NDiginotes1)
+
+            if (transactionAmmount < firstBuy.NDiginotes)
             {
-                firstBuy.NDiginotes1 = firstBuy.NDiginotes1 - transactionAmmount;
+                firstBuy.NDiginotes = firstBuy.NDiginotes - transactionAmmount;
                 sell.TryDequeue(out or);
                 Log.getInstance().printLog("Removeu Sell Order");
             }
-            else if (transactionAmmount < firstSell.NDiginotes1)
+            else if (transactionAmmount < firstSell.NDiginotes)
             {
-                firstSell.NDiginotes1 = firstSell.NDiginotes1 - transactionAmmount;
+                firstSell.NDiginotes = firstSell.NDiginotes - transactionAmmount;
                 buy.TryDequeue(out or);
                 Log.getInstance().printLog("Removeu buy Order");
             }
@@ -261,7 +266,10 @@ namespace Remote
                 Log.getInstance().printLog("Removed 2 orders");
             }
 
-            return true;
+            List<Order> list = new List<Order>();
+            list.Add(firstBuy);
+            list.Add(firstSell);
+            return list;
         }
 
     }
