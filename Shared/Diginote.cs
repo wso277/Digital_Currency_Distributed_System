@@ -11,25 +11,6 @@ namespace Remote
         public ulong serialNumber { get; set; }
         double val;
 
-        /*public ulong Serial
-        {
-            get
-            {
-                return serialNumber;
-            }
-        }
-
-        public double Value
-        {
-            get
-            {
-                return val;
-            }
-            set fica mano
-            {
-                val = value;
-            }
-        }*/
 
         public Diginote() { }
         public Diginote(Random r, ulong value = 1)

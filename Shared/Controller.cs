@@ -105,6 +105,7 @@ namespace Remote
             sw.WriteLine(sellJson);
             sw.WriteLine(buyJson);
             sw.Flush();
+            sw.Close();
         }
 
 
@@ -132,24 +133,6 @@ namespace Remote
                 saveDiginotes();
             }
         }
-
-        /*public bool transaction(ulong[] diginotesToTransaction, string oldUsername, string newUsername)
-        {
-            foreach (ulong s in diginotesToTransaction)
-            {
-                string username;
-                diginotes.TryGetValue(s, out username);
-                if (username == oldUsername)
-                {
-                    diginotes.TryUpdate(s, newUsername, oldUsername);
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            return true;
-        }*/
 
         public int getDiginotes(string username)
         {
@@ -218,20 +201,46 @@ namespace Remote
 
         private bool concretizeOrder()
         {
-            Order firstBuy;
-            Order firstSell;
+            Order firstBuy = null;
+            Order firstSell = null;
             int transactionAmmount;
 
             buy.TryPeek(out firstBuy);
             sell.TryPeek(out firstSell);
 
+            if (firstBuy == null || firstSell == null)
+            {
+                Log.getInstance().printLog("Não há ordens a concretizar");
+                return false;
+            }
+
             transactionAmmount = Math.Min((int)firstBuy.NDiginotes1, (int)firstSell.NDiginotes1);
+            
+            List<Diginote> sellerDig = new List<Diginote>();
+            List<Diginote> buyerDig = new List<Diginote>();
+            diginotes.TryGetValue(firstSell.Username, out sellerDig);
+            diginotes.TryGetValue(firstBuy.Username, out buyerDig);
 
+            if (sellerDig.Count < transactionAmmount)
+            {
+                Log.getInstance().printLog("O Seller não tem suficientes");
+                return false;
+            }
 
+            Diginote tempDig;
 
+            for (int i = 0; i < transactionAmmount; i++)
+            {
+                tempDig = sellerDig.ElementAt(0);
+                sellerDig.RemoveAt(0);
+                buyerDig.Add(tempDig);
+            }
 
-            Log.getInstance().printLog("Não há ordens a concretizar");
-            return false;
+            diginotes[firstBuy.Username] = buyerDig;
+            diginotes[firstSell.Username] = sellerDig;
+            Log.getInstance().printLog("Um coiso tipo fez transação");
+
+            return true;
         }
 
     }

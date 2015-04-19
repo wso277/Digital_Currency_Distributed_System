@@ -140,6 +140,7 @@ namespace Client
 
             sw.WriteLine(ordersString);
             sw.Flush();
+            sw.Close();
         }
     }
 }
