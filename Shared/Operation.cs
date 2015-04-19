@@ -8,15 +8,17 @@ using System.Threading.Tasks;
 
 namespace Remote
 {
-    public class Operation:MarshalByRefObject, IOperation
+    public class Operation : MarshalByRefObject, IOperation
     {
+
+        public event BlockInterface blockInterface;
         public event UpdateOrder updateOrderEvent;
         string type;
         float value;
         int nDiginotes;
         string username;
 
-        public Operation(){}
+        public Operation() { }
 
         public Operation(string type, int nDiginotes, string username)
         {
@@ -42,10 +44,21 @@ namespace Remote
 
         public bool addOrder(Order order)
         {
+            //BlockInterfaceDispatch();
             List<Order> list = Controller.getInstance().addOrder(order);
             if (list != null && list.Count == 2)
+            {
                 NotifyOrdersDispatch(list.ElementAt(0), list.ElementAt(1));
-            return true;
+
+                Log.getInstance().printLog("retornou dois");
+                return true;
+            }
+            else if (list != null && list.Count == 1)
+            {
+                return true;
+            }
+            
+            return false;
         }
 
         private void NotifyOrdersDispatch(Order buyerOrder, Order sellerOrder)
@@ -77,6 +90,47 @@ namespace Remote
                 Console.WriteLine("[TriggerOrderEvent]: Exception");
                 updateOrderEvent -= handler;
             }
+        }
+
+        private void BlockInterfaceDispatch(Order order)
+        {
+            if (blockInterface != null)
+            {
+                Delegate[] invkList = blockInterface.GetInvocationList();
+
+                foreach (BlockInterface handler in invkList)
+                {
+                    Console.WriteLine("[Entities]: Event triggered: invoking handler");
+                    object[] pars = { handler, order };
+                    new Thread(BlockInterfaceEvent).Start(pars);
+                }
+            }
+        }
+
+        private void BlockInterfaceEvent(object pars)
+        {
+            BlockInterface handler = (BlockInterface)((object[])pars)[0];
+            Order order = (Order)((object[])pars)[1];
+            try
+            {
+                handler(order);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("[TriggerOrderEvent]: Exception");
+                blockInterface -= handler;
+            }
+        }
+
+        public void updateOrder(Order order)
+        {
+            BlockInterfaceDispatch(order);
+            Controller.getInstance().updateOrder(order);
+        }
+
+        public void removeOrder(Order order)
+        {
+            Controller.getInstance().removeOrder(order);
         }
     }
 }

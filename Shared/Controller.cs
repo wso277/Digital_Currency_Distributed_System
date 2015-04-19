@@ -16,8 +16,8 @@ namespace Remote
         string pathToDiginoteDB = "diginotes.db";
         string pathToOrdersDB = "orders.db";
         ConcurrentDictionary<string, List<Diginote>> diginotes;
-        ConcurrentQueue<Order> sell;
-        ConcurrentQueue<Order> buy;
+        List<Order> sell;
+        List<Order> buy;
 
         static int MAX_DIGINOTES = 1000;
         static int DIGINOTES_TO_DISTRIBUTE = 500;
@@ -81,24 +81,22 @@ namespace Remote
                 string sellString = rw.ReadLine();
                 string buyString = rw.ReadLine();
 
-                List<Order> sellList = JsonConvert.DeserializeObject<List<Order>>(sellString);
-                List<Order> buyList = JsonConvert.DeserializeObject<List<Order>>(buyString);
-                sell = new ConcurrentQueue<Order>(sellList);
+                sell = JsonConvert.DeserializeObject<List<Order>>(sellString);
+                buy = JsonConvert.DeserializeObject<List<Order>>(buyString);
+                /*sell = new ConcurrentQueue<Order>(sellList);
                 buy = new ConcurrentQueue<Order>(buyList);
-
+                */
             }
             else
             {
-                sell = new ConcurrentQueue<Order>();
-                buy = new ConcurrentQueue<Order>();
+                sell = new List<Order>();
+                buy = new List<Order>();
             }
         }
         private void saveOrders()
         {
-            List<Order> sellList = new List<Order>(sell);
-            List<Order> buyList = new List<Order>(buy);
-            string sellJson = JsonConvert.SerializeObject(sellList);
-            string buyJson = JsonConvert.SerializeObject(buyList);
+            string sellJson = JsonConvert.SerializeObject(sell);
+            string buyJson = JsonConvert.SerializeObject(buy);
 
             StreamWriter sw;
             sw = File.CreateText(pathToOrdersDB);
@@ -162,7 +160,6 @@ namespace Remote
             {
                 if (iterator.Current.Username == order.Username)
                 {
-
                     Log.getInstance().printLog("Already exist order from same username " + order.Username);
                     return null;
                 }
@@ -173,7 +170,6 @@ namespace Remote
             {
                 if (iterator.Current.Username == order.Username)
                 {
-
                     Log.getInstance().printLog("Already exist order from same username " + order.Username);
                     return null;
                 }
@@ -183,7 +179,7 @@ namespace Remote
             if (order.Type == "sell")
             {
                 Log.getInstance().printLog("Added new sell order");
-                sell.Enqueue(order);
+                sell.Add(order);
                 list = concretizeOrder();
                 saveOrders();
                 return list;
@@ -192,7 +188,7 @@ namespace Remote
             {
 
                 Log.getInstance().printLog("Added new buy order");
-                buy.Enqueue(order);
+                buy.Add(order);
                 list = concretizeOrder();
                 saveOrders();
                 return list;
@@ -205,33 +201,44 @@ namespace Remote
         {
             Order firstBuy = null;
             Order firstSell = null;
-            int transactionAmmount;
+            int transactionAmount;
 
-            buy.TryPeek(out firstBuy);
-            sell.TryPeek(out firstSell);
+
+            if (buy.Count > 0)
+            {
+                firstBuy = buy.ElementAt(0);
+            }
+            
+            if(sell.Count > 0)
+            {
+                firstSell = sell.ElementAt(0);
+            }
+
 
             if (firstBuy == null || firstSell == null)
             {
                 Log.getInstance().printLog("Não há ordens a concretizar");
-                return null;
+                List<Order> list = new List<Order>();
+                list.Add(new Order("dfgndfgk", 0.0f, 0, "sffgdj"));
+                return list;
             }
 
-            transactionAmmount = Math.Min((int)firstBuy.NDiginotes, (int)firstSell.NDiginotes);
+            transactionAmount = Math.Min((int)firstBuy.NDiginotes, (int)firstSell.NDiginotes);
 
             List<Diginote> sellerDig = new List<Diginote>();
             List<Diginote> buyerDig = new List<Diginote>();
             diginotes.TryGetValue(firstSell.Username, out sellerDig);
             diginotes.TryGetValue(firstBuy.Username, out buyerDig);
 
-            if (sellerDig.Count < transactionAmmount)
+            /*if (sellerDig.Count < transactionAmount)
             {
                 Log.getInstance().printLog("O Seller não tem suficientes");
                 return null;
-            }
+            }*/
 
             Diginote tempDig;
 
-            for (int i = 0; i < transactionAmmount; i++)
+            for (int i = 0; i < transactionAmount; i++)
             {
                 tempDig = sellerDig.ElementAt(0);
                 sellerDig.RemoveAt(0);
@@ -247,30 +254,96 @@ namespace Remote
 
             Order or;
 
-            if (transactionAmmount < firstBuy.NDiginotes)
+            if (transactionAmount < firstBuy.NDiginotes)
             {
-                firstBuy.NDiginotes = firstBuy.NDiginotes - transactionAmmount;
-                sell.TryDequeue(out or);
+                firstBuy.NDiginotes = firstBuy.NDiginotes - transactionAmount;
+                firstSell.NDiginotes = 0;
+                sell.RemoveAt(0);
                 Log.getInstance().printLog("Removeu Sell Order");
             }
-            else if (transactionAmmount < firstSell.NDiginotes)
+            else if (transactionAmount < firstSell.NDiginotes)
             {
-                firstSell.NDiginotes = firstSell.NDiginotes - transactionAmmount;
-                buy.TryDequeue(out or);
+                firstSell.NDiginotes = firstSell.NDiginotes - transactionAmount;
+                firstBuy.NDiginotes = 0;
+                buy.RemoveAt(0);
                 Log.getInstance().printLog("Removeu buy Order");
             }
             else
             {
-                buy.TryDequeue(out or);
-                sell.TryDequeue(out or);
+                firstBuy.NDiginotes = 0;
+                firstSell.NDiginotes = 0;
+                buy.RemoveAt(0);
+                sell.RemoveAt(0);
                 Log.getInstance().printLog("Removed 2 orders");
             }
 
-            List<Order> list = new List<Order>();
-            list.Add(firstBuy);
-            list.Add(firstSell);
-            return list;
+            List<Order> placeboList = new List<Order>();
+            placeboList.Add(firstBuy);
+            placeboList.Add(firstSell);
+            return placeboList;
         }
 
+
+        public void updateOrder(Order order)
+        {
+            if (order.Type == "buy")
+            {
+                for (int i = 0; i < buy.Count; i++)
+                {
+                    if (buy.ElementAt(i).Username == order.Username)
+                    {
+                        buy[i] = order;
+                        cotacao = order.Cotacao;
+                    }
+                    else
+                    {
+                        buy.ElementAt(i).Cotacao = order.Cotacao;
+                    }
+                }
+            } 
+            if (order.Type == "sell")
+            {
+                for (int i = 0; i < sell.Count; i++)
+                {
+                    if (sell.ElementAt(i).Username == order.Username)
+                    {
+                        sell[i] = order;
+                        cotacao = order.Cotacao;
+                    }
+                    else
+                    {
+                        buy.ElementAt(i).Cotacao = order.Cotacao;
+                    }
+                }
+            }
+
+
+        }
+
+        internal void removeOrder(Order order)
+        {
+            if (order.Type == "buy")
+            {
+                for (int i = 0; i < buy.Count; i++)
+                {
+                    if (buy.ElementAt(i).Username == order.Username)
+                    {
+                        buy.RemoveAt(i);
+                        return;
+                    }
+                }
+            }
+            if (order.Type == "sell")
+            {
+                for (int i = 0; i < sell.Count; i++)
+                {
+                    if (sell.ElementAt(i).Username == order.Username)
+                    {
+                        sell.RemoveAt(i);
+                        return;
+                    }
+                }
+            }
+        }
     }
 }

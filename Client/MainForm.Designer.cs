@@ -37,6 +37,7 @@
             this.nDiginotesTextLabel = new System.Windows.Forms.Label();
             this.nDiginotesLabel = new System.Windows.Forms.Label();
             this.nDiginotesSpinner = new System.Windows.Forms.NumericUpDown();
+            this.EditOrderButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.nDiginotesSpinner)).BeginInit();
             this.SuspendLayout();
             // 
@@ -48,6 +49,7 @@
             this.logoutButton.TabIndex = 0;
             this.logoutButton.Text = "Logout";
             this.logoutButton.UseVisualStyleBackColor = true;
+            this.logoutButton.Click += new System.EventHandler(this.logoutButton_Click);
             // 
             // cotacaoTextLabel
             // 
@@ -131,7 +133,7 @@
             0,
             0});
             this.nDiginotesSpinner.Location = new System.Drawing.Point(254, 292);
-            this.nDiginotesSpinner.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nDiginotesSpinner.Margin = new System.Windows.Forms.Padding(2);
             this.nDiginotesSpinner.Maximum = new decimal(new int[] {
             1000000000,
             0,
@@ -141,11 +143,22 @@
             this.nDiginotesSpinner.Size = new System.Drawing.Size(102, 20);
             this.nDiginotesSpinner.TabIndex = 9;
             // 
+            // EditOrderButton
+            // 
+            this.EditOrderButton.Location = new System.Drawing.Point(528, 42);
+            this.EditOrderButton.Name = "EditOrderButton";
+            this.EditOrderButton.Size = new System.Drawing.Size(75, 23);
+            this.EditOrderButton.TabIndex = 10;
+            this.EditOrderButton.Text = "Edit Order";
+            this.EditOrderButton.UseVisualStyleBackColor = true;
+            this.EditOrderButton.Click += new System.EventHandler(this.EditOrderButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(615, 324);
+            this.Controls.Add(this.EditOrderButton);
             this.Controls.Add(this.nDiginotesSpinner);
             this.Controls.Add(this.nDiginotesLabel);
             this.Controls.Add(this.nDiginotesTextLabel);
@@ -175,5 +188,6 @@
         private System.Windows.Forms.Label nDiginotesTextLabel;
         private System.Windows.Forms.Label nDiginotesLabel;
         private System.Windows.Forms.NumericUpDown nDiginotesSpinner;
+        private System.Windows.Forms.Button EditOrderButton;
     }
 }

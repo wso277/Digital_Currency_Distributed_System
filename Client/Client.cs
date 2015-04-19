@@ -11,6 +11,9 @@ namespace Client
 {
     static class Client
     {
+        //TODO error labels
+        //TODO maybe graphics
+        //TODO check all values
         /// <summary>
         /// The main entry point for the application.
         /// </summary>

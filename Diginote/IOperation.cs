@@ -10,6 +10,8 @@ namespace Common
     {
         event UpdateOrder updateOrderEvent;
 
+        event BlockInterface blockInterface;
+
         int getDiginotes(string username);
 
         void addDiginotes(string username);
@@ -17,5 +19,9 @@ namespace Common
         float getCotacao();
 
         bool addOrder(Order order);
+
+        void removeOrder(Order order);
+
+        void updateOrder(Order order);
     }
 }

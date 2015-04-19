@@ -45,6 +45,14 @@ namespace Common
             set { type = value; }
         }
 
+        decimal totalDiginotes;
+
+        public decimal TotalDiginotes
+        {
+            get { return totalDiginotes; }
+            set { totalDiginotes = value; }
+        }
+
         public Order(string username, float cotacao, decimal nDiginotes, string type)
         {
             this.username = username;
@@ -52,6 +60,7 @@ namespace Common
             this.nDiginotes = nDiginotes;
             this.type = type;
             this.status = "Not Finished";
+            this.TotalDiginotes = nDiginotes;
         }
 
 
