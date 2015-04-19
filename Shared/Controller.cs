@@ -238,7 +238,28 @@ namespace Remote
 
             diginotes[firstBuy.Username] = buyerDig;
             diginotes[firstSell.Username] = sellerDig;
+
             Log.getInstance().printLog("Um coiso tipo fez transação");
+
+            Order or;
+            if (transactionAmmount < firstBuy.NDiginotes1)
+            {
+                firstBuy.NDiginotes1 = firstBuy.NDiginotes1 - transactionAmmount;
+                sell.TryDequeue(out or);
+                Log.getInstance().printLog("Removeu Sell Order");
+            }
+            else if (transactionAmmount < firstSell.NDiginotes1)
+            {
+                firstSell.NDiginotes1 = firstSell.NDiginotes1 - transactionAmmount;
+                buy.TryDequeue(out or);
+                Log.getInstance().printLog("Removeu buy Order");
+            }
+            else
+            {
+                buy.TryDequeue(out or);
+                sell.TryDequeue(out or);
+                Log.getInstance().printLog("Removed 2 orders");
+            }
 
             return true;
         }
