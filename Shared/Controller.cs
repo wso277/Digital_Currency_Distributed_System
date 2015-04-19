@@ -15,7 +15,7 @@ namespace Remote
         static Controller controller = null;
         string pathToDiginoteDB = "diginotes.db";
         string pathToOrdersDB = "orders.db";
-        ConcurrentDictionary<ulong, string> diginotes;
+        ConcurrentDictionary<string, List<Diginote>> diginotes;
         ConcurrentQueue<Order> sell;
         ConcurrentQueue<Order> buy;
 
@@ -53,12 +53,12 @@ namespace Remote
                 using (StreamReader sw = new StreamReader(pathToDiginoteDB))
                 using (JsonReader reader = new JsonTextReader(sw))
                 {
-                    diginotes = js.Deserialize<ConcurrentDictionary<ulong, string>>(reader);
+                    diginotes = js.Deserialize<ConcurrentDictionary<string, List<Diginote>>>(reader);
                 }
             }
             else
             {
-                diginotes = new ConcurrentDictionary<ulong, string>();
+                diginotes = new ConcurrentDictionary<string, List<Diginote>>();
             }
         }
         private void saveDiginotes()
@@ -113,17 +113,27 @@ namespace Remote
             if (diginotesInSystem < MAX_DIGINOTES)
             {
                 Random r = new Random();
+                List<Diginote> clientDiginotes;
+                diginotes.TryGetValue(username, out clientDiginotes);
+
+                if (clientDiginotes == null)
+                {
+                    clientDiginotes = new List<Diginote>();
+                }
+
                 for (int i = 0; i < DIGINOTES_TO_DISTRIBUTE; i++)
                 {
                     Diginote dig = new Diginote(r);
-                    diginotes.TryAdd(dig.serialNumber, username);
-                    diginotesInSystem = diginotes.Count;
+                    clientDiginotes.Add(dig);
                 }
+
+                diginotesInSystem += clientDiginotes.Count;
+                diginotes.TryAdd(username, clientDiginotes);
                 saveDiginotes();
             }
         }
 
-        public bool transaction(ulong[] diginotesToTransaction, string oldUsername, string newUsername)
+        /*public bool transaction(ulong[] diginotesToTransaction, string oldUsername, string newUsername)
         {
             foreach (ulong s in diginotesToTransaction)
             {
@@ -139,16 +149,20 @@ namespace Remote
                 }
             }
             return true;
-        }
+        }*/
 
         public int getDiginotes(string username)
         {
-            int nDiginotes = 0;
-            foreach (string name in diginotes.Values)
+            List<Diginote> list;
+            diginotes.TryGetValue(username, out list);
+            if (list == null)
             {
-                if (name == username) nDiginotes++;
+                return 0;
             }
-            return nDiginotes;
+            else
+            {
+                return list.Count;
+            }
         }
 
         public float getCotacao()
@@ -156,11 +170,14 @@ namespace Remote
             return cotacao;
         }
 
-        public bool addOrder(Order order) {
+        public bool addOrder(Order order)
+        {
             var iterator = sell.GetEnumerator();
 
-            while (iterator.MoveNext()) {
-                if (iterator.Current.Username == order.Username) {
+            while (iterator.MoveNext())
+            {
+                if (iterator.Current.Username == order.Username)
+                {
 
                     Log.getInstance().printLog("Already exist order from same username " + order.Username);
                     return false;
@@ -181,21 +198,39 @@ namespace Remote
             if (order.Type == "sell")
             {
                 Log.getInstance().printLog("Added new sell order");
-                //sell.Enqueue(order);
                 sell.Enqueue(order);
                 saveOrders();
+                concretizeOrder();
                 return true;
             }
             else if (order.Type == "buy")
             {
 
                 Log.getInstance().printLog("Added new buy order");
-                //buy.Enqueue(order);
                 buy.Enqueue(order);
                 saveOrders();
+                concretizeOrder();
                 return true;
             }
 
+            return false;
+        }
+
+        private bool concretizeOrder()
+        {
+            Order firstBuy;
+            Order firstSell;
+            int transactionAmmount;
+
+            buy.TryPeek(out firstBuy);
+            sell.TryPeek(out firstSell);
+
+            transactionAmmount = Math.Min((int)firstBuy.NDiginotes1, (int)firstSell.NDiginotes1);
+
+
+
+
+            Log.getInstance().printLog("Não há ordens a concretizar");
             return false;
         }
 

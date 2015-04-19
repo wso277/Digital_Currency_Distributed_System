@@ -8,7 +8,7 @@ namespace Remote
 {
     public class Diginote
     {
-        public ulong serialNumber {get; set;}
+        public ulong serialNumber { get; set; }
         double val;
 
         /*public ulong Serial
@@ -31,6 +31,7 @@ namespace Remote
             }
         }*/
 
+        public Diginote() { }
         public Diginote(Random r, ulong value = 1)
         {
             val = value;
