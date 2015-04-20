@@ -77,15 +77,18 @@ namespace Remote
         {
             if (File.Exists(pathToOrdersDB))
             {
-                StreamReader rw = new StreamReader(pathToOrdersDB);
-                string sellString = rw.ReadLine();
-                string buyString = rw.ReadLine();
+                using (StreamReader rw = new StreamReader(pathToOrdersDB))
+                {
 
-                sell = JsonConvert.DeserializeObject<List<Order>>(sellString);
-                buy = JsonConvert.DeserializeObject<List<Order>>(buyString);
-                /*sell = new ConcurrentQueue<Order>(sellList);
-                buy = new ConcurrentQueue<Order>(buyList);
-                */
+                    string sellString = rw.ReadLine();
+                    string buyString = rw.ReadLine();
+
+                    sell = JsonConvert.DeserializeObject<List<Order>>(sellString);
+                    buy = JsonConvert.DeserializeObject<List<Order>>(buyString);
+                    /*sell = new ConcurrentQueue<Order>(sellList);
+                    buy = new ConcurrentQueue<Order>(buyList);
+                    */
+                }
             }
             else
             {
@@ -98,13 +101,14 @@ namespace Remote
             string sellJson = JsonConvert.SerializeObject(sell);
             string buyJson = JsonConvert.SerializeObject(buy);
 
-            StreamWriter sw;
-            sw = File.CreateText(pathToOrdersDB);
+            using (StreamWriter sw = new StreamWriter(pathToOrdersDB, false))
+            {
 
-            sw.WriteLine(sellJson);
-            sw.WriteLine(buyJson);
-            sw.Flush();
-            sw.Close();
+                sw.WriteLine(sellJson);
+                sw.WriteLine(buyJson);
+                sw.Flush();
+            }
+
         }
 
 

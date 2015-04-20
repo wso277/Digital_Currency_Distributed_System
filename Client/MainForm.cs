@@ -142,10 +142,13 @@ namespace Client
         {
             if (File.Exists(pathToOrdersDB))
             {
-                StreamReader rw = new StreamReader(pathToOrdersDB);
-                string orderString = rw.ReadLine();
+                using (StreamReader rw = new StreamReader(pathToOrdersDB))
+                {
 
-                orders = JsonConvert.DeserializeObject<List<Order>>(orderString);
+                    string orderString = rw.ReadLine();
+
+                    orders = JsonConvert.DeserializeObject<List<Order>>(orderString);
+                }
 
             }
             else
@@ -157,12 +160,11 @@ namespace Client
         {
             string ordersString = JsonConvert.SerializeObject(orders);
 
-            StreamWriter sw;
-            sw = File.CreateText(pathToOrdersDB);
-
-            sw.WriteLine(ordersString);
-            sw.Flush();
-            sw.Close();
+            using (StreamWriter sw = new StreamWriter(pathToOrdersDB, false))
+            {
+                sw.WriteLine(ordersString);
+                sw.Flush();
+            }
         }
 
 
@@ -256,7 +258,7 @@ namespace Client
         {
             LoginForm loginForm = new LoginForm();
             saveOrders();
-            this.Dispose();
+            this.Hide();
             loginForm.ShowDialog();
             //TODO voltar ao menu de login
         }

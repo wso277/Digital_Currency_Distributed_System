@@ -36,8 +36,22 @@ namespace Client
 
         private void registerButton_Click(object sender, EventArgs e)
         {
-            ul.addUser(usernameBox.Text, nameBox.Text, passwordBox.Text.GetHashCode());
-            openMainForm(true);
+            if (usernameBox.Text != "" && nameBox.Text != "" && passwordBox.Text != "")
+            {
+                if (ul.addUser(usernameBox.Text, nameBox.Text, passwordBox.Text.GetHashCode()))
+                {
+
+                    openMainForm(true);
+                }
+                else
+                {
+                    errorLabel.Text = "User already registered with that username";
+                }
+            }
+            else
+            {
+                errorLabel.Text = "Please fill all fields to register";
+            }
         }
 
         private void openMainForm(bool newU)
