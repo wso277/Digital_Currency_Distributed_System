@@ -38,6 +38,8 @@
             this.nDiginotesLabel = new System.Windows.Forms.Label();
             this.nDiginotesSpinner = new System.Windows.Forms.NumericUpDown();
             this.EditOrderButton = new System.Windows.Forms.Button();
+            this.messageTextLabel = new System.Windows.Forms.Label();
+            this.messageLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.nDiginotesSpinner)).BeginInit();
             this.SuspendLayout();
             // 
@@ -71,9 +73,9 @@
             // 
             // venderButton
             // 
-            this.venderButton.Location = new System.Drawing.Point(12, 289);
+            this.venderButton.Location = new System.Drawing.Point(12, 275);
             this.venderButton.Name = "venderButton";
-            this.venderButton.Size = new System.Drawing.Size(237, 23);
+            this.venderButton.Size = new System.Drawing.Size(237, 24);
             this.venderButton.TabIndex = 3;
             this.venderButton.Text = "Vender";
             this.venderButton.UseVisualStyleBackColor = true;
@@ -81,9 +83,9 @@
             // 
             // comprarButton
             // 
-            this.comprarButton.Location = new System.Drawing.Point(362, 289);
+            this.comprarButton.Location = new System.Drawing.Point(362, 275);
             this.comprarButton.Name = "comprarButton";
-            this.comprarButton.Size = new System.Drawing.Size(242, 23);
+            this.comprarButton.Size = new System.Drawing.Size(242, 24);
             this.comprarButton.TabIndex = 4;
             this.comprarButton.Text = "Comprar";
             this.comprarButton.UseVisualStyleBackColor = true;
@@ -132,7 +134,7 @@
             0,
             0,
             0});
-            this.nDiginotesSpinner.Location = new System.Drawing.Point(254, 292);
+            this.nDiginotesSpinner.Location = new System.Drawing.Point(254, 278);
             this.nDiginotesSpinner.Margin = new System.Windows.Forms.Padding(2);
             this.nDiginotesSpinner.Maximum = new decimal(new int[] {
             1000000000,
@@ -153,11 +155,32 @@
             this.EditOrderButton.UseVisualStyleBackColor = true;
             this.EditOrderButton.Click += new System.EventHandler(this.EditOrderButton_Click);
             // 
+            // messageTextLabel
+            // 
+            this.messageTextLabel.AutoSize = true;
+            this.messageTextLabel.Location = new System.Drawing.Point(7, 304);
+            this.messageTextLabel.Name = "messageTextLabel";
+            this.messageTextLabel.Size = new System.Drawing.Size(58, 13);
+            this.messageTextLabel.TabIndex = 11;
+            this.messageTextLabel.Text = "Messages:";
+            // 
+            // messageLabel
+            // 
+            this.messageLabel.AutoSize = true;
+            this.messageLabel.BackColor = System.Drawing.SystemColors.Control;
+            this.messageLabel.ForeColor = System.Drawing.Color.Red;
+            this.messageLabel.Location = new System.Drawing.Point(71, 304);
+            this.messageLabel.Name = "messageLabel";
+            this.messageLabel.Size = new System.Drawing.Size(0, 13);
+            this.messageLabel.TabIndex = 12;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(615, 324);
+            this.Controls.Add(this.messageLabel);
+            this.Controls.Add(this.messageTextLabel);
             this.Controls.Add(this.EditOrderButton);
             this.Controls.Add(this.nDiginotesSpinner);
             this.Controls.Add(this.nDiginotesLabel);
@@ -189,5 +212,7 @@
         private System.Windows.Forms.Label nDiginotesLabel;
         private System.Windows.Forms.NumericUpDown nDiginotesSpinner;
         private System.Windows.Forms.Button EditOrderButton;
+        private System.Windows.Forms.Label messageTextLabel;
+        private System.Windows.Forms.Label messageLabel;
     }
 }

@@ -46,18 +46,24 @@ namespace Remote
         {
             //BlockInterfaceDispatch();
             List<Order> list = Controller.getInstance().addOrder(order);
+            while (list != null && list.Count == 2 && (list.ElementAt(0).NDiginotes != 0 || list.ElementAt(1).NDiginotes != 0))
+            {
+                NotifyOrdersDispatch(list.ElementAt(0), list.ElementAt(1));
+                list = Controller.getInstance().concretizeOrder();
+
+            }
+
             if (list != null && list.Count == 2)
             {
                 NotifyOrdersDispatch(list.ElementAt(0), list.ElementAt(1));
-
+                Thread.Sleep(1000);
                 Log.getInstance().printLog("retornou dois");
                 return true;
-            }
-            else if (list != null && list.Count == 1)
+            } else if (list != null && list.Count == 1)
             {
                 return true;
             }
-            
+
             return false;
         }
 

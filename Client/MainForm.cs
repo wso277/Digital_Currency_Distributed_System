@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Runtime.Remoting;
 using System.IO;
 using Newtonsoft.Json;
+using System.Threading;
 
 namespace Client
 {
@@ -25,6 +26,7 @@ namespace Client
         public MainForm(string username, bool newU)
         {
             this.username = username;
+            pathToOrdersDB = "orders_" + username + ".db";
             InitializeComponent();
             iop = (IOperation)RemoteNew.New(typeof(IOperation));
             if (newU)
@@ -67,16 +69,21 @@ namespace Client
             if (nDiginotes > 0 && nDiginotes <= iop.getDiginotes(username))
             {
                 Order sell = new Order(username, iop.getCotacao(), nDiginotes, "sell");
+                orders.Add(sell);
                 if (iop.addOrder(sell))
                 {
-                    orders.Add(sell);
                     saveOrders();
                     updateOrderTable();
                 }
                 else
                 {
-                    //TODO ADD ERROR LABEL
+                    orders.RemoveAt(orders.Count - 1);
+                    messageLabel.Text = "An order is already placed. Remove your order before placing a new one.";
                 }
+            }
+            else
+            {
+                messageLabel.Text = "Not enough diginotes for that transaction.";
 
             }
         }
@@ -90,16 +97,23 @@ namespace Client
             if (nDiginotes > 0)
             {
                 Order buy = new Order(username, iop.getCotacao(), nDiginotes, "buy");
+
+                orders.Add(buy);
                 if (iop.addOrder(buy))
                 {
-                    orders.Add(buy);
                     saveOrders();
                     updateOrderTable();
                 }
                 else
                 {
-                    //TODO ADD error label
+                    orders.RemoveAt(orders.Count - 1);
+                    messageLabel.Text = "An order is already placed. Remove your order before placing a new one.";
                 }
+            }
+            else
+            {
+                messageLabel.Text = "Not enough diginotes for that transaction.";
+
             }
         }
 
@@ -114,11 +128,11 @@ namespace Client
 
             for (int c = 0, line = 1; line <= orders.Count; line++)
             {
-                operationHistoryTable.Controls.Add(new Label() { Text = orders.ElementAt<Order>(line - 1).Type, Anchor = AnchorStyles.Top, AutoSize = true }, c++, line);
-                operationHistoryTable.Controls.Add(new Label() { Text = orders.ElementAt<Order>(line - 1).NDiginotes.ToString(), Anchor = AnchorStyles.Top, AutoSize = true }, c++, line);
-                operationHistoryTable.Controls.Add(new Label() { Text = orders.ElementAt<Order>(line - 1).Cotacao.ToString(), Anchor = AnchorStyles.Top, AutoSize = true }, c++, line);
-                operationHistoryTable.Controls.Add(new Label() { Text = ((float)orders.ElementAt<Order>(line - 1).TotalDiginotes).ToString(), Anchor = AnchorStyles.Top, AutoSize = true }, c++, line);
-                operationHistoryTable.Controls.Add(new Label() { Text = orders.ElementAt<Order>(line - 1).Status, Anchor = AnchorStyles.Top, AutoSize = true }, c++, line);
+                operationHistoryTable.Controls.Add(new Label() { Text = orders[(line - 1)].Type, Anchor = AnchorStyles.Top, AutoSize = true }, c++, line);
+                operationHistoryTable.Controls.Add(new Label() { Text = orders[(line - 1)].NDiginotes.ToString(), Anchor = AnchorStyles.Top, AutoSize = true }, c++, line);
+                operationHistoryTable.Controls.Add(new Label() { Text = orders[line - 1].Cotacao.ToString(), Anchor = AnchorStyles.Top, AutoSize = true }, c++, line);
+                operationHistoryTable.Controls.Add(new Label() { Text = ((float)orders[line - 1].TotalDiginotes).ToString(), Anchor = AnchorStyles.Top, AutoSize = true }, c++, line);
+                operationHistoryTable.Controls.Add(new Label() { Text = orders[line - 1].Status, Anchor = AnchorStyles.Top, AutoSize = true }, c++, line);
                 c = 0;
             }
         }
@@ -154,24 +168,28 @@ namespace Client
 
         private void blockInterfaceHandler(Order order)
         {
-            //SetButtonStatus(false);
+            this.Invoke((MethodInvoker)delegate
+            {
+                messageLabel.Text = "Diginote value changed. Waiting for all peers.";
+            });
+
             if (username != order.Username)
             {
 
-                if (orders.Count > 0 && orders.ElementAt(orders.Count - 1).Status == "Not Finished")
+                if (orders.Count > 0 && orders[orders.Count - 1].Status == "Not Finished")
                 {
 
-                    Antonio confirmCotacao = new Antonio(orders.ElementAt(orders.Count - 1), iop);
+                    Antonio confirmCotacao = new Antonio(orders[orders.Count - 1], iop);
                     confirmCotacao.ShowDialog();
 
                     if (confirmCotacao.res)
                     {
-                        orders.ElementAt(orders.Count - 1).Cotacao = iop.getCotacao();
+                        orders[orders.Count - 1].Cotacao = iop.getCotacao();
                         confirmCotacao.Dispose();
                     }
                     else
                     {
-                        iop.removeOrder(orders.ElementAt(orders.Count - 1));
+                        iop.removeOrder(orders[orders.Count - 1]);
                         orders.RemoveAt(orders.Count - 1);
                         confirmCotacao.Dispose();
                     }
@@ -182,35 +200,41 @@ namespace Client
             {
                 updateOrderTable();
                 cotacaoLabel.Text = iop.getCotacao().ToString();
+                SetButtonStatus(false);
+                Thread.Sleep(5000);
+                SetButtonStatus(true);
             });
+
+            saveOrders();
+
         }
 
         public void updateOrderHandler(Order buyerOrder, Order sellerOrder)
         {
             Log.getInstance().printLog("UPDATE ORDER HANDLER");
 
-            if (orders.ElementAt(orders.Count-1).Username == buyerOrder.Username)
+            if (orders[orders.Count - 1].Username == buyerOrder.Username)
             {
                 if (buyerOrder.NDiginotes > 0)
                 {
-                    orders.ElementAt(orders.Count - 1).NDiginotes = buyerOrder.NDiginotes;
+                    orders[orders.Count - 1].NDiginotes = buyerOrder.NDiginotes;
                 }
                 else
                 {
-                    orders.ElementAt(orders.Count - 1).NDiginotes = 0;
-                    orders.ElementAt(orders.Count - 1).Status = "Fulfilled";
+                    orders[orders.Count - 1].NDiginotes = 0;
+                    orders[orders.Count - 1].Status = "Fulfilled";
                 }
             }
-            if (orders.ElementAt(orders.Count - 1).Username == sellerOrder.Username)
+            if (orders[orders.Count - 1].Username == sellerOrder.Username)
             {
                 if (sellerOrder.NDiginotes > 0)
                 {
-                    orders.ElementAt(orders.Count - 1).NDiginotes = sellerOrder.NDiginotes;
+                    orders[orders.Count - 1].NDiginotes = sellerOrder.NDiginotes;
                 }
                 else
                 {
-                    orders.ElementAt(orders.Count - 1).NDiginotes = 0;
-                    orders.ElementAt(orders.Count - 1).Status = "Fulfilled";
+                    orders[orders.Count - 1].NDiginotes = 0;
+                    orders[orders.Count - 1].Status = "Fulfilled";
                 }
             }
 
@@ -220,7 +244,6 @@ namespace Client
                 nDiginotesLabel.Text = iop.getDiginotes(username).ToString();
             });
 
-            //SetButtonStatus(true);
         }
 
         private void SetButtonStatus(bool status)
@@ -231,39 +254,51 @@ namespace Client
 
         private void logoutButton_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            LoginForm loginForm = new LoginForm();
+            saveOrders();
+            this.Dispose();
+            loginForm.ShowDialog();
             //TODO voltar ao menu de login
         }
 
         private void EditOrderButton_Click(object sender, EventArgs e)
         {
-            if (orders.ElementAt(orders.Count - 1).Status == "Not Finished")
+            if (orders.Count > 0)
             {
-                EditOrder editOrderDialog = new EditOrder(orders.ElementAt(orders.Count - 1), iop);
-                editOrderDialog.ShowDialog();
-                if (editOrderDialog.update)
+                if (orders[orders.Count - 1].Status == "Not Finished")
                 {
-                    if (editOrderDialog.order.Cotacao == 0)
+                    EditOrder editOrderDialog = new EditOrder(orders[orders.Count - 1], iop);
+                    editOrderDialog.ShowDialog();
+                    if (editOrderDialog.update)
                     {
-                        orders.RemoveAt(orders.Count - 1);
-                        iop.removeOrder(editOrderDialog.order);
-                        editOrderDialog.Dispose();
+                        if (editOrderDialog.order.Cotacao == 0)
+                        {
+                            orders.RemoveAt(orders.Count - 1);
+                            iop.removeOrder(editOrderDialog.order);
+                            editOrderDialog.Dispose();
+                        }
+                        else
+                        {
+                            orders[orders.Count - 1] = editOrderDialog.order;
+                            iop.updateOrder(orders[orders.Count - 1]);
+                            editOrderDialog.Dispose();
+                        }
                     }
                     else
                     {
-                        orders[orders.Count - 1] = editOrderDialog.order;
-                        iop.updateOrder(orders.ElementAt(orders.Count - 1));
                         editOrderDialog.Dispose();
                     }
-                }
-                else
-                {
-                    editOrderDialog.Dispose();
-                }
 
-                updateOrderTable();
-                cotacaoLabel.Text = iop.getCotacao().ToString();
+                    updateOrderTable();
+                    cotacaoLabel.Text = iop.getCotacao().ToString();
+                }
             }
+            else
+            {
+                messageLabel.Text = "No current orders. Please add an order in order to edit.";
+            }
+
+            saveOrders();
         }
 
     }

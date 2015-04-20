@@ -24,6 +24,18 @@ namespace Common
         {
             this.path = path;
 
+            /*if (!File.Exists(path))
+            {
+                sw = File.CreateText(path);
+            }
+            else
+            {
+                sw = File.AppendText(path);
+            }*/
+        }
+        
+        public void printLog(string msg)
+        {
             if (!File.Exists(path))
             {
                 sw = File.CreateText(path);
@@ -32,13 +44,12 @@ namespace Common
             {
                 sw = File.AppendText(path);
             }
-        }
-        
-        public void printLog(string msg)
-        {
+
             Console.WriteLine(msg);
             sw.WriteLine(DateTime.Now + " | " + msg);
             sw.Flush();
+
+            sw.Close();
         }
     }
 }

@@ -197,7 +197,7 @@ namespace Remote
             return null;
         }
 
-        private List<Order> concretizeOrder()
+        public List<Order> concretizeOrder()
         {
             Order firstBuy = null;
             Order firstSell = null;
@@ -235,6 +235,15 @@ namespace Remote
                 Log.getInstance().printLog("O Seller não tem suficientes");
                 return null;
             }*/
+
+            if (sellerDig == null)
+            {
+                sellerDig = new List<Diginote>();
+            }
+            if (buyerDig == null)
+            {
+                buyerDig = new List<Diginote>();
+            }
 
             Diginote tempDig;
 
@@ -278,6 +287,8 @@ namespace Remote
             }
 
             List<Order> placeboList = new List<Order>();
+            Log.getInstance().printLog(firstBuy.NDiginotes.ToString());
+            Log.getInstance().printLog(firstSell.NDiginotes.ToString());
             placeboList.Add(firstBuy);
             placeboList.Add(firstSell);
             return placeboList;
@@ -312,7 +323,7 @@ namespace Remote
                     }
                     else
                     {
-                        buy.ElementAt(i).Cotacao = order.Cotacao;
+                        sell.ElementAt(i).Cotacao = order.Cotacao;
                     }
                 }
             }
