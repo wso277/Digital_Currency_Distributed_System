@@ -260,7 +260,6 @@ namespace Client
             saveOrders();
             this.Hide();
             loginForm.ShowDialog();
-            //TODO voltar ao menu de login
         }
 
         private void EditOrderButton_Click(object sender, EventArgs e)
