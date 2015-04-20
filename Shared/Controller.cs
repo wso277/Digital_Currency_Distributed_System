@@ -263,7 +263,7 @@ namespace Remote
 
             saveDiginotes();
 
-            Log.getInstance().printLog("Um coiso tipo fez transação");
+            Log.getInstance().printLog("User " + firstBuy.Username + " bought " + transactionAmount + " digicoins from user " + firstSell.Username);
 
             Order or;
 
@@ -272,14 +272,12 @@ namespace Remote
                 firstBuy.NDiginotes = firstBuy.NDiginotes - transactionAmount;
                 firstSell.NDiginotes = 0;
                 sell.RemoveAt(0);
-                Log.getInstance().printLog("Removeu Sell Order");
             }
             else if (transactionAmount < firstSell.NDiginotes)
             {
                 firstSell.NDiginotes = firstSell.NDiginotes - transactionAmount;
                 firstBuy.NDiginotes = 0;
                 buy.RemoveAt(0);
-                Log.getInstance().printLog("Removeu buy Order");
             }
             else
             {
@@ -287,12 +285,9 @@ namespace Remote
                 firstSell.NDiginotes = 0;
                 buy.RemoveAt(0);
                 sell.RemoveAt(0);
-                Log.getInstance().printLog("Removed 2 orders");
             }
 
             List<Order> placeboList = new List<Order>();
-            Log.getInstance().printLog(firstBuy.NDiginotes.ToString());
-            Log.getInstance().printLog(firstSell.NDiginotes.ToString());
             placeboList.Add(firstBuy);
             placeboList.Add(firstSell);
             return placeboList;

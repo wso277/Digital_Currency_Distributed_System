@@ -57,7 +57,6 @@ namespace Remote
             {
                 NotifyOrdersDispatch(list.ElementAt(0), list.ElementAt(1));
                 Thread.Sleep(1000);
-                Log.getInstance().printLog("retornou dois");
                 return true;
             } else if (list != null && list.Count == 1)
             {
